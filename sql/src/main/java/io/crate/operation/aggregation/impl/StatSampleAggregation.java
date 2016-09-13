@@ -22,14 +22,11 @@
 package io.crate.operation.aggregation.impl;
 
 import com.google.common.collect.ImmutableList;
-import io.crate.analyze.symbol.Function;
-import io.crate.analyze.symbol.Symbol;
 import io.crate.breaker.RamAccountingContext;
 import io.crate.breaker.SizeEstimator;
 import io.crate.breaker.SizeEstimatorFactory;
 import io.crate.metadata.FunctionIdent;
 import io.crate.metadata.FunctionInfo;
-import io.crate.metadata.StmtCtx;
 import io.crate.operation.Input;
 import io.crate.operation.aggregation.AggregationFunction;
 import io.crate.types.DataType;
@@ -120,6 +117,5 @@ public class StatSampleAggregation extends AggregationFunction<Set<Object>, Set<
     public Set<Object> terminatePartial(RamAccountingContext ramAccountingContext, Set<Object> state) {
         return state;
     }
-
 
 }
