@@ -55,6 +55,7 @@ public class AggregationImplModule extends AbstractModule {
         SumAggregation.register(this);
         CountAggregation.register(this);
         CollectSetAggregation.register(this);
+        StatSampleAggregation.register(this);
 
         VarianceAggregation.register(this);
         GeometricMeanAggregation.register(this);
