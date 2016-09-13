@@ -22,11 +22,14 @@
 package io.crate.operation.aggregation.impl;
 
 import com.google.common.collect.ImmutableList;
+import io.crate.analyze.symbol.Function;
+import io.crate.analyze.symbol.Symbol;
 import io.crate.breaker.RamAccountingContext;
 import io.crate.breaker.SizeEstimator;
 import io.crate.breaker.SizeEstimatorFactory;
 import io.crate.metadata.FunctionIdent;
 import io.crate.metadata.FunctionInfo;
+import io.crate.metadata.StmtCtx;
 import io.crate.operation.Input;
 import io.crate.operation.aggregation.AggregationFunction;
 import io.crate.types.DataType;
@@ -34,8 +37,7 @@ import io.crate.types.DataTypes;
 import io.crate.types.SetType;
 import org.elasticsearch.common.breaker.CircuitBreakingException;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class StatSampleAggregation extends AggregationFunction<Set<Object>, Set<Object>> {
 
@@ -44,10 +46,12 @@ public class StatSampleAggregation extends AggregationFunction<Set<Object>, Set<
 
     private FunctionInfo info;
 
+    private long sampleSize;
+
     public static void register(AggregationImplModule mod) {
         for (final DataType dataType : DataTypes.PRIMITIVE_TYPES) {
             mod.register(new StatSampleAggregation(new FunctionInfo(new FunctionIdent(NAME,
-                    ImmutableList.of(dataType)),
+                    ImmutableList.of(dataType, DataTypes.LONG)),
                     new SetType(dataType), FunctionInfo.Type.AGGREGATE)));
         }
     }
@@ -64,7 +68,14 @@ public class StatSampleAggregation extends AggregationFunction<Set<Object>, Set<
 
     @Override
     public Set<Object> iterate(RamAccountingContext ramAccountingContext, Set<Object> state, Input... args) throws CircuitBreakingException {
-
+        Object value = args[0].value();
+        this.sampleSize = (long) args[1].value();
+        if (value == null) {
+            return state;
+        }
+        if (state.add(value)) {
+            ramAccountingContext.addBytes(innerTypeEstimator.estimateSize(value));
+        }
         return state;
     }
 
@@ -81,12 +92,47 @@ public class StatSampleAggregation extends AggregationFunction<Set<Object>, Set<
 
     @Override
     public Set<Object> reduce(RamAccountingContext ramAccountingContext, Set<Object> state1, Set<Object> state2) {
+        /*
+        ReservoirSample(S[1..n], R[1..k])
+      // fill the reservoir array
+      for i = 1 to k
+          R[i] := S[i]
 
-        return state1;
+      // replace elements with gradually decreasing probability
+      for i = k+1 to n
+        j := random(1, i)   // important: inclusive range
+        if j <= k
+            R[j] := S[i]
+         */
+        int count = 0;
+
+        List<Object> reservoir = new ArrayList<Object>();
+
+        Random random = new Random();
+
+        for (Object newValue : state2) {
+            if (count < sampleSize) {
+                reservoir.add(newValue);
+
+            } else {
+                int j = random.nextInt(count);
+                if (j < reservoir.size()) {
+                    reservoir.set(j, newValue);
+                }
+            }
+
+            count++;
+        }
+
+        HashSet<Object> b = new HashSet<Object>(reservoir);
+        System.out.println('d');
+        return b;
     }
 
     @Override
     public Set<Object> terminatePartial(RamAccountingContext ramAccountingContext, Set<Object> state) {
         return state;
     }
+
+
 }
