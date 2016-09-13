@@ -92,18 +92,6 @@ public class StatSampleAggregation extends AggregationFunction<Set<Object>, Set<
 
     @Override
     public Set<Object> reduce(RamAccountingContext ramAccountingContext, Set<Object> state1, Set<Object> state2) {
-        /*
-        ReservoirSample(S[1..n], R[1..k])
-      // fill the reservoir array
-      for i = 1 to k
-          R[i] := S[i]
-
-      // replace elements with gradually decreasing probability
-      for i = k+1 to n
-        j := random(1, i)   // important: inclusive range
-        if j <= k
-            R[j] := S[i]
-         */
         int count = 0;
 
         List<Object> reservoir = new ArrayList<Object>();
@@ -124,9 +112,8 @@ public class StatSampleAggregation extends AggregationFunction<Set<Object>, Set<
             count++;
         }
 
-        HashSet<Object> b = new HashSet<Object>(reservoir);
-        System.out.println('d');
-        return b;
+        state1 = new HashSet<Object>(reservoir);
+        return state1;
     }
 
     @Override
