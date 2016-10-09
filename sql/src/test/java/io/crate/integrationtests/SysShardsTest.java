@@ -139,10 +139,10 @@ public class SysShardsTest extends SQLTransportIntegrationTest {
             "recovery",
             "relocating_node",
             "routing_state",
-            "schema_name",
             "size",
             "state",
-            "table_name"));
+            "table_name",
+            "table_schema"));
     }
 
     @Test
@@ -182,7 +182,7 @@ public class SysShardsTest extends SQLTransportIntegrationTest {
         assertEquals(26L, response.rowCount());
         List<String> tableNames = Arrays.asList("blobs", "characters", "quotes");
         for (int i = 0; i < response.rowCount(); i++) {
-            assertThat(tableNames.contains(response.rows()[i][11]), is(true));
+            assertThat(tableNames.contains(response.rows()[i][10]), is(true));
         }
     }
 

@@ -45,7 +45,7 @@ public class InformationSchemaQueryTest extends SQLTransportIntegrationTest {
         ensureYellow();
         client().admin().indices().close(new CloseIndexRequest("t3")).actionGet();
 
-        execute("select * from information_schema.tables where schema_name = 'doc'");
+        execute("select * from information_schema.tables where table_schema = 'doc'");
         assertEquals(1L, response.rowCount());
         execute("select * from information_schema.columns where table_name = 't3'");
         assertEquals(0, response.rowCount());
@@ -57,7 +57,7 @@ public class InformationSchemaQueryTest extends SQLTransportIntegrationTest {
     @Test
     public void testConcurrentInformationSchemaQueries() throws Exception {
         final SQLResponse response = execute("select * from information_schema.columns " +
-                                             "order by schema_name, table_name, column_name");
+                                             "order by table_schema, table_name, column_name");
         final CountDownLatch latch = new CountDownLatch(40);
         final AtomicReference<AssertionError> lastAssertionError = new AtomicReference<>();
 
@@ -66,7 +66,7 @@ public class InformationSchemaQueryTest extends SQLTransportIntegrationTest {
                 @Override
                 public void run() {
                     SQLResponse resp = execute("select * from information_schema.columns " +
-                                               "order by schema_name, table_name, column_name");
+                                               "order by table_schema, table_name, column_name");
                     try {
                         assertThat(resp.rows(), Matchers.equalTo(response.rows()));
                     } catch (AssertionError e) {
@@ -96,14 +96,14 @@ public class InformationSchemaQueryTest extends SQLTransportIntegrationTest {
                 "with (number_of_replicas=8)");
         ensureYellow();
 
-        final SQLResponse response = execute("select * from sys.shards where table_name in ('t1', 't2') and state='UNASSIGNED' order by schema_name, table_name, id");
+        final SQLResponse response = execute("select * from sys.shards where table_name in ('t1', 't2') and state='UNASSIGNED' order by table_schema, table_name, id");
         final CountDownLatch latch = new CountDownLatch(40);
         final AtomicReference<AssertionError> lastAssertionError = new AtomicReference<>();
         for (int i = 0; i < 40; i++) {
             final Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    SQLResponse resp = execute("select * from sys.shards where table_name in ('t1', 't2') and state='UNASSIGNED' order by schema_name, table_name, id");
+                    SQLResponse resp = execute("select * from sys.shards where table_name in ('t1', 't2') and state='UNASSIGNED' order by table_schema, table_name, id");
                     try {
                         assertThat(resp.rows(), Matchers.equalTo(response.rows()));
                     } catch (AssertionError e) {

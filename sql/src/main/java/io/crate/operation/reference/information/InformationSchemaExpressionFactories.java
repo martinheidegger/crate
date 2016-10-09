@@ -77,7 +77,7 @@ public class InformationSchemaExpressionFactories {
 
     public static Map<ColumnIdent, RowCollectExpressionFactory> tableConstraintFactories() {
         return ImmutableMap.<ColumnIdent, RowCollectExpressionFactory>builder()
-            .put(InformationTableConstraintsTableInfo.Columns.SCHEMA_NAME, new RowCollectExpressionFactory() {
+            .put(InformationTableConstraintsTableInfo.Columns.TABLE_SCHEMA, new RowCollectExpressionFactory() {
 
                 @Override
                 public RowCollectExpression create() {
@@ -117,7 +117,7 @@ public class InformationSchemaExpressionFactories {
                     return new InformationTablePartitionsExpression.PartitionsTableNameExpression();
                 }
             })
-            .put(InformationPartitionsTableInfo.Columns.SCHEMA_NAME, new RowCollectExpressionFactory() {
+            .put(InformationPartitionsTableInfo.Columns.TABLE_SCHEMA, new RowCollectExpressionFactory() {
 
                 @Override
                 public RowCollectExpression create() {
@@ -164,7 +164,7 @@ public class InformationSchemaExpressionFactories {
 
     public static Map<ColumnIdent, RowCollectExpressionFactory> columnsFactories() {
         return ImmutableMap.<ColumnIdent, RowCollectExpressionFactory>builder()
-            .put(InformationColumnsTableInfo.Columns.SCHEMA_NAME, new RowCollectExpressionFactory() {
+            .put(InformationColumnsTableInfo.Columns.TABLE_SCHEMA, new RowCollectExpressionFactory() {
 
                 @Override
                 public RowCollectExpression create() {
@@ -234,7 +234,7 @@ public class InformationSchemaExpressionFactories {
 
     public static Map<ColumnIdent, RowCollectExpressionFactory> tablesFactories() {
         return ImmutableMap.<ColumnIdent, RowCollectExpressionFactory>builder()
-            .put(InformationTablesTableInfo.Columns.SCHEMA_NAME, new RowCollectExpressionFactory() {
+            .put(InformationTablesTableInfo.Columns.TABLE_SCHEMA, new RowCollectExpressionFactory() {
 
                 @Override
                 public RowCollectExpression create() {

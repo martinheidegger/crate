@@ -19,7 +19,7 @@ public class UnassignedShardsExpressionFactories {
 
     public static Map<ColumnIdent, RowCollectExpressionFactory> getSysShardsTableInfoFactories() {
         return ImmutableMap.<ColumnIdent, RowCollectExpressionFactory>builder()
-            .put(SysShardsTableInfo.Columns.SCHEMA_NAME, new RowCollectExpressionFactory() {
+            .put(SysShardsTableInfo.Columns.TABLE_SCHEMA, new RowCollectExpressionFactory() {
 
                 @Override
                 public RowContextCollectorExpression create() {

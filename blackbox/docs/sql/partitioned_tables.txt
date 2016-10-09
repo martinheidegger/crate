@@ -30,7 +30,7 @@ as a whole table can be deleted and no expensive query is involved.
    partitioning are internally base32 encoded into the partition name
    (which is a separate table). So for every partition, the partition table
    name includes:
-   ``(optional)schema_name + table_name + base32 encoded partition
+   ``(optional)table_schema + table_name + base32 encoded partition
    column value(s) + an internal overhead of 14 bytes``
 
    Altogether this must not exceed the 255 bytes length
@@ -77,7 +77,7 @@ This table shows up in the ``information_schema.tables`` table,
 recognizable as partitioned table by a non null ``partitioned_by`` column
 (aliased as ``p_b`` here)::
 
-    cr> SELECT schema_name as schema,
+    cr> SELECT table_schema as schema,
     ...   table_name,
     ...   number_of_shards as num_shards,
     ...   number_of_replicas as num_reps,
@@ -95,10 +95,10 @@ recognizable as partitioned table by a non null ``partitioned_by`` column
 
 ::
 
-    cr> SELECT schema_name as schema, table_name, column_name, data_type
+    cr> SELECT table_schema as schema, table_name, column_name, data_type
     ... FROM information_schema.columns
-    ... WHERE schema_name = 'doc' AND table_name = 'parted_table'
-    ... ORDER BY schema_name, table_name, column_name;
+    ... WHERE table_schema = 'doc' AND table_name = 'parted_table'
+    ... ORDER BY table_schema, table_name, column_name;
     +--------+--------------+-------------+-----------+
     | schema | table_name   | column_name | data_type |
     +--------+--------------+-------------+-----------+
@@ -117,7 +117,7 @@ by querying the ``information_schema.table_partitions`` table::
 
     cr> SELECT count(*) as partition_count
     ... FROM information_schema.table_partitions
-    ... WHERE schema_name = 'doc' AND table_name = 'parted_table';
+    ... WHERE table_schema = 'doc' AND table_name = 'parted_table';
     +-----------------+
     | partition_count |
     +-----------------+
@@ -140,7 +140,7 @@ Insert
 
     cr> SELECT partition_ident, "values", number_of_shards
     ... FROM information_schema.table_partitions
-    ... WHERE schema_name = 'doc' AND table_name = 'parted_table'
+    ... WHERE table_schema = 'doc' AND table_name = 'parted_table'
     ... ORDER BY partition_ident;
     +--------------------------+------------------------+------------------+
     | partition_ident          | values                 | number_of_shards |
@@ -165,7 +165,7 @@ no additional partition is created::
 
     cr> SELECT partition_ident, "values", number_of_shards
     ... FROM information_schema.table_partitions
-    ... WHERE schema_name = 'doc' AND table_name = 'parted_table'
+    ... WHERE table_schema = 'doc' AND table_name = 'parted_table'
     ... ORDER BY partition_ident;
     +--------------------------+------------------------+------------------+
     | partition_ident          | values                 | number_of_shards |
@@ -229,7 +229,7 @@ matching document, which is a lot faster::
 
     cr> SELECT count(*) as partition_count
     ... FROM information_schema.table_partitions
-    ... WHERE schema_name = 'doc' AND table_name = 'parted_table';
+    ... WHERE table_schema = 'doc' AND table_name = 'parted_table';
     +-----------------+
     | partition_count |
     +-----------------+
@@ -388,7 +388,7 @@ on **future** partitions.
 
     cr> SELECT count(*) as num_shards, sum(num_docs) as num_docs
     ... FROM sys.shards
-    ... WHERE schema_name = 'doc' AND table_name = 'parted_table';
+    ... WHERE table_schema = 'doc' AND table_name = 'parted_table';
     +------------+----------+
     | num_shards | num_docs |
     +------------+----------+
@@ -400,7 +400,7 @@ on **future** partitions.
 
     cr> SELECT partition_ident, "values", number_of_shards
     ... FROM information_schema.table_partitions
-    ... WHERE schema_name = 'doc' AND table_name = 'parted_table'
+    ... WHERE table_schema = 'doc' AND table_name = 'parted_table'
     ... ORDER BY partition_ident;
     +--------------------------+------------------------+------------------+
     | partition_ident          | values                 | number_of_shards |

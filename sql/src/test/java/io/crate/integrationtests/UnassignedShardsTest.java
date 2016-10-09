@@ -37,7 +37,7 @@ public class UnassignedShardsTest extends SQLTransportIntegrationTest {
         execute("set global transient cluster.routing.allocation.enable=none");
         try {
             execute("create table no_shards (id int) clustered into 5 shards with (number_of_replicas=2)");
-            execute("select state, id, table_name from sys.shards where schema_name='doc' AND table_name='no_shards'");
+            execute("select state, id, table_name from sys.shards where table_schema='doc' AND table_name='no_shards'");
             assertThat(response.rowCount(), is(15L));
             Object[] stateColumn = TestingHelpers.getColumn(response.rows(), 0);
             for (Object val : stateColumn) {

@@ -34,7 +34,7 @@ public class InformationColumnsTableInfo extends InformationTableInfo {
     public static final TableIdent IDENT = new TableIdent(InformationSchemaInfo.NAME, NAME);
 
     public static class Columns {
-        public static final ColumnIdent SCHEMA_NAME = new ColumnIdent("schema_name");
+        public static final ColumnIdent TABLE_SCHEMA = new ColumnIdent("table_schema");
         public static final ColumnIdent TABLE_NAME = new ColumnIdent("table_name");
         public static final ColumnIdent COLUMN_NAME = new ColumnIdent("column_name");
         public static final ColumnIdent ORDINAL_POSITION = new ColumnIdent("ordinal_position");
@@ -45,7 +45,7 @@ public class InformationColumnsTableInfo extends InformationTableInfo {
     }
 
     public static class References {
-        public static final Reference SCHEMA_NAME = info(Columns.SCHEMA_NAME, DataTypes.STRING);
+        public static final Reference TABLE_SCHEMA = info(Columns.TABLE_SCHEMA, DataTypes.STRING);
         public static final Reference TABLE_NAME = info(Columns.TABLE_NAME, DataTypes.STRING);
         public static final Reference COLUMN_NAME = info(Columns.COLUMN_NAME, DataTypes.STRING);
         public static final Reference ORDINAL_POSITION = info(Columns.ORDINAL_POSITION, DataTypes.SHORT);
@@ -62,9 +62,9 @@ public class InformationColumnsTableInfo extends InformationTableInfo {
     protected InformationColumnsTableInfo(ClusterService clusterService) {
         super(clusterService,
             IDENT,
-            ImmutableList.of(Columns.SCHEMA_NAME, Columns.TABLE_NAME, Columns.COLUMN_NAME),
+            ImmutableList.of(Columns.TABLE_NAME, Columns.TABLE_SCHEMA, Columns.COLUMN_NAME),
             ImmutableSortedMap.<ColumnIdent, Reference>naturalOrder()
-                .put(Columns.SCHEMA_NAME, References.SCHEMA_NAME)
+                .put(Columns.TABLE_SCHEMA, References.TABLE_SCHEMA)
                 .put(Columns.TABLE_NAME, References.TABLE_NAME)
                 .put(Columns.COLUMN_NAME, References.COLUMN_NAME)
                 .put(Columns.ORDINAL_POSITION, References.ORDINAL_POSITION)

@@ -200,12 +200,12 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
         ensureGreen();
         waitNoPendingTasksOnAll();
 
-        execute("select schema_name, table_name, number_of_shards, number_of_replicas, clustered_by, partitioned_by " +
-                "from information_schema.tables where schema_name='my_schema' and table_name='parted'");
+        execute("select table_schema, table_name, number_of_shards, number_of_replicas, clustered_by, partitioned_by " +
+                "from information_schema.tables where table_schema='my_schema' and table_name='parted'");
         assertThat(TestingHelpers.printedTable(response.rows()), is("my_schema| parted| 4| 0| _id| [month]\n"));
 
         // no other tables with that name, e.g. partitions considered as tables or such
-        execute("select schema_name, table_name from information_schema.tables where table_name like '%parted%'");
+        execute("select table_schema, table_name from information_schema.tables where table_name like '%parted%'");
         assertThat(TestingHelpers.printedTable(response.rows()), is(
             "my_schema| parted\n"));
 
@@ -220,9 +220,9 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
                 "partitioned by(timestamp) with (number_of_replicas=0)");
         ensureYellow();
 
-        execute("select * from information_schema.tables where schema_name='doc' order by table_name");
+        execute("select * from information_schema.tables where table_schema='doc' order by table_name");
         assertEquals(1L, response.rowCount());
-        assertEquals("quotes", response.rows()[0][8]);
+        assertEquals("quotes", response.rows()[0][7]);
 
         execute("select * from information_schema.columns where table_name='quotes' order by ordinal_position");
         assertEquals(3L, response.rowCount());
@@ -724,7 +724,7 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
     public void testDeleteFromPartitionedTableUnknownPartition() throws Exception {
         this.setup.partitionTableSetup();
         SQLResponse response = execute("select partition_ident from information_schema.table_partitions " +
-                                       "where table_name='parted' and schema_name='doc'" +
+                                       "where table_name='parted' and table_schema='doc'" +
                                        "order by partition_ident");
         assertThat(response.rowCount(), is(2L));
         assertThat((String) response.rows()[0][0], is(new PartitionName("parted", ImmutableList.of(new BytesRef("1388534400000"))).ident()));
@@ -734,7 +734,7 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
         refresh();
         // Test that no partitions were deleted
         SQLResponse newResponse = execute("select partition_ident from information_schema.table_partitions " +
-                                          "where table_name='parted' and schema_name='doc'" +
+                                          "where table_name='parted' and table_schema='doc'" +
                                           "order by partition_ident");
         assertThat(newResponse.rows(), is(response.rows()));
     }
@@ -744,7 +744,7 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
         this.setup.partitionTableSetup();
 
         SQLResponse response = execute("select partition_ident from information_schema.table_partitions " +
-                                       "where table_name='parted' and schema_name='doc'" +
+                                       "where table_name='parted' and table_schema='doc'" +
                                        "order by partition_ident");
         assertThat(response.rowCount(), is(2L));
         assertThat((String) response.rows()[0][0], is(new PartitionName("parted", ImmutableList.of(new BytesRef("1388534400000"))).ident()));
@@ -754,7 +754,7 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
         refresh();
         // Test that no partitions were deleted
         SQLResponse newResponse = execute("select partition_ident from information_schema.table_partitions " +
-                                          "where table_name='parted' and schema_name='doc'" +
+                                          "where table_name='parted' and table_schema='doc'" +
                                           "order by partition_ident");
         assertThat(newResponse.rows(), is(response.rows()));
     }
@@ -776,7 +776,7 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
         refresh();
 
         SQLResponse response = execute("select partition_ident from information_schema.table_partitions " +
-                                       "where table_name='quotes' and schema_name='doc'" +
+                                       "where table_name='quotes' and table_schema='doc'" +
                                        "order by partition_ident");
         assertThat(response.rowCount(), is(3L));
         assertThat((String) response.rows()[0][0], is(new PartitionName("parted", ImmutableList.of(new BytesRef("1395874800000"))).ident()));
@@ -791,7 +791,7 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
 
         // Test that no partitions were deleted
         SQLResponse newResponse = execute("select partition_ident from information_schema.table_partitions " +
-                                          "where table_name='quotes' and schema_name='doc'" +
+                                          "where table_name='quotes' and table_schema='doc'" +
                                           "order by partition_ident");
         assertThat(newResponse.rows(), is(response.rows()));
     }
@@ -2023,7 +2023,7 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
 
         execute("alter table device_event SET (number_of_replicas='3')");
 
-        execute("select table_name, number_of_replicas from information_schema.tables where schema_name = 'doc' order by table_name");
+        execute("select table_name, number_of_replicas from information_schema.tables where table_schema = 'doc' order by table_name");
         assertThat((String) response.rows()[0][1], is("3"));
         assertThat((String) response.rows()[1][1], is("0"));
     }

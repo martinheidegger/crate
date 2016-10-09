@@ -718,13 +718,13 @@ id
 |                      | shards is 5).                    |             |
 +----------------------+----------------------------------+-------------+
 
-schema_name
------------
+table_schema
+------------
 
 +----------------------+----------------------------------+-------------+
 |     Column Name      |           Description            | Return Type |
 +======================+==================================+=============+
-| ``schema_name``      | The schema name.                 | ``String``  |
+| ``table_schema``     | The schema name.                 | ``String``  |
 |                      | This will be "blob" for          |             |
 |                      | shards of blob tables and "doc"  |             |
 |                      | for shards of common tables.     |             |
@@ -916,7 +916,7 @@ shard rebalancing or snapshot recovery.
 
 For example, you can query shards like this::
 
-  cr> select schema_name as schema,
+  cr> select table_schema as schema,
   ...   table_name as t,
   ...   id,
   ...   partition_ident as p_i,
