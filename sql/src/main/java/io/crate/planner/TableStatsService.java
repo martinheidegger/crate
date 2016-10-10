@@ -57,7 +57,7 @@ public class TableStatsService extends AbstractComponent implements Runnable {
     static final String UNNAMED = "";
     static final int DEFAULT_SOFT_LIMIT = 10_000;
     static final String STMT =
-        "select cast(sum(num_docs) as long), table_schema, table_name from sys.shards group by 2, 3";
+        "select cast(sum(num_docs) as long), schema_name, table_name from sys.shards group by 2, 3";
 
     private final ClusterService clusterService;
     private final Provider<SQLOperations> sqlOperationsProvider;

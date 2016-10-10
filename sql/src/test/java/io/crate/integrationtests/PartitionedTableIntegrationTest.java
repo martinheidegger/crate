@@ -724,7 +724,7 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
     public void testDeleteFromPartitionedTableUnknownPartition() throws Exception {
         this.setup.partitionTableSetup();
         SQLResponse response = execute("select partition_ident from information_schema.table_partitions " +
-                                       "where table_name='parted' and table_schema='doc'" +
+                                       "where table_name='parted' and schema_name='doc'" +
                                        "order by partition_ident");
         assertThat(response.rowCount(), is(2L));
         assertThat((String) response.rows()[0][0], is(new PartitionName("parted", ImmutableList.of(new BytesRef("1388534400000"))).ident()));
@@ -734,7 +734,7 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
         refresh();
         // Test that no partitions were deleted
         SQLResponse newResponse = execute("select partition_ident from information_schema.table_partitions " +
-                                          "where table_name='parted' and table_schema='doc'" +
+                                          "where table_name='parted' and schema_name='doc'" +
                                           "order by partition_ident");
         assertThat(newResponse.rows(), is(response.rows()));
     }
@@ -744,7 +744,7 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
         this.setup.partitionTableSetup();
 
         SQLResponse response = execute("select partition_ident from information_schema.table_partitions " +
-                                       "where table_name='parted' and table_schema='doc'" +
+                                       "where table_name='parted' and schema_name='doc'" +
                                        "order by partition_ident");
         assertThat(response.rowCount(), is(2L));
         assertThat((String) response.rows()[0][0], is(new PartitionName("parted", ImmutableList.of(new BytesRef("1388534400000"))).ident()));
@@ -754,7 +754,7 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
         refresh();
         // Test that no partitions were deleted
         SQLResponse newResponse = execute("select partition_ident from information_schema.table_partitions " +
-                                          "where table_name='parted' and table_schema='doc'" +
+                                          "where table_name='parted' and schema_name='doc'" +
                                           "order by partition_ident");
         assertThat(newResponse.rows(), is(response.rows()));
     }
@@ -776,7 +776,7 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
         refresh();
 
         SQLResponse response = execute("select partition_ident from information_schema.table_partitions " +
-                                       "where table_name='quotes' and table_schema='doc'" +
+                                       "where table_name='quotes' and schema_name='doc'" +
                                        "order by partition_ident");
         assertThat(response.rowCount(), is(3L));
         assertThat((String) response.rows()[0][0], is(new PartitionName("parted", ImmutableList.of(new BytesRef("1395874800000"))).ident()));
@@ -791,7 +791,7 @@ public class PartitionedTableIntegrationTest extends SQLTransportIntegrationTest
 
         // Test that no partitions were deleted
         SQLResponse newResponse = execute("select partition_ident from information_schema.table_partitions " +
-                                          "where table_name='quotes' and table_schema='doc'" +
+                                          "where table_name='quotes' and schema_name='doc'" +
                                           "order by partition_ident");
         assertThat(newResponse.rows(), is(response.rows()));
     }

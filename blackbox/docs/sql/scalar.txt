@@ -56,14 +56,14 @@ format('format_string', parameter, [ parameter , ... ]) returns string
 The ``format`` function takes a format string and a variable number of
 arguments and returns a formatted string::
 
-    cr> select format('%s.%s', table_schema, table_name) from sys.shards
+    cr> select format('%s.%s', schema_name, table_name) from sys.shards
     ... where table_name = 'locations'
     ... limit 1;
-    +-------------------------------------------+
-    | format('%s.%s', table_schema, table_name) |
-    +-------------------------------------------+
-    | doc.locations                             |
-    +-------------------------------------------+
+    +------------------------------------------+
+    | format('%s.%s', schema_name, table_name) |
+    +------------------------------------------+
+    | doc.locations                            |
+    +------------------------------------------+
     SELECT 1 row in set (... sec)
 
 ::

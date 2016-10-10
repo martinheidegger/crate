@@ -303,7 +303,7 @@ public class SysShardsExpressionsTest extends CrateUnitTest {
 
     @Test
     public void testSchemaName() throws Exception {
-        Reference refInfo = refInfo("sys.shards.table_schema", DataTypes.STRING, RowGranularity.SHARD);
+        Reference refInfo = refInfo("sys.shards.schema_name", DataTypes.STRING, RowGranularity.SHARD);
         ShardReferenceImplementation<BytesRef> shardExpression = (ShardReferenceImplementation<BytesRef>) resolver.getImplementation(refInfo);
         assertEquals(new BytesRef("doc"), shardExpression.value());
     }
@@ -312,7 +312,7 @@ public class SysShardsExpressionsTest extends CrateUnitTest {
     public void testCustomSchemaName() throws Exception {
         indexName = "my_schema.wikipedia_de";
         prepare();
-        Reference refInfo = refInfo("sys.shards.table_schema", DataTypes.STRING, RowGranularity.SHARD);
+        Reference refInfo = refInfo("sys.shards.schema_name", DataTypes.STRING, RowGranularity.SHARD);
         ShardReferenceImplementation<BytesRef> shardExpression = (ShardReferenceImplementation<BytesRef>) resolver.getImplementation(refInfo);
         assertEquals(new BytesRef("my_schema"), shardExpression.value());
         // reset indexName
