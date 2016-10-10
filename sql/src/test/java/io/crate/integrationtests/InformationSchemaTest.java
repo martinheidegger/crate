@@ -281,7 +281,7 @@ public class InformationSchemaTest extends SQLTransportIntegrationTest {
             "[id]| PRIMARY_KEY| node_checks| sys\n" +
             "[id]| PRIMARY_KEY| nodes| sys\n" +
             "[name]| PRIMARY_KEY| repositories| sys\n" +
-            "[table_schema, table_name, id, partition_ident]| PRIMARY_KEY| shards| sys\n" +
+            "[schema_name, table_name, id, partition_ident]| PRIMARY_KEY| shards| sys\n" +
             "[name, repository]| PRIMARY_KEY| snapshots| sys\n" +
             "[mountain]| PRIMARY_KEY| summits| sys\n"
         ));
@@ -778,7 +778,7 @@ public class InformationSchemaTest extends SQLTransportIntegrationTest {
         execute("insert into my_table (par, content) values (3, 'content6')");
         ensureGreen();
 
-        execute("select table_name, table_schema, partition_ident, values, number_of_shards, number_of_replicas " +
+        execute("select table_name, schema_name, partition_ident, values, number_of_shards, number_of_replicas " +
                 "from information_schema.table_partitions order by table_name, partition_ident");
         assertEquals(3, response.rowCount());
 
@@ -940,7 +940,7 @@ public class InformationSchemaTest extends SQLTransportIntegrationTest {
         execute("insert into my_table (par, par_str, content) values (2, 'asdf', 'content5')");
         ensureYellow();
 
-        execute("select table_name, table_schema, partition_ident, values, number_of_shards, number_of_replicas " +
+        execute("select table_name, schema_name, partition_ident, values, number_of_shards, number_of_replicas " +
                 "from information_schema.table_partitions order by table_name, partition_ident");
         assertEquals(5, response.rowCount());
 

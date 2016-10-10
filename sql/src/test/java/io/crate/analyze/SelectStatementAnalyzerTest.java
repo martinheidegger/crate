@@ -1958,7 +1958,7 @@ public class SelectStatementAnalyzerTest extends BaseAnalyzerTest {
     @Test
     public void testCollectSetCanBeUsedInHaving() throws Exception {
         SelectAnalyzedStatement stmt = analyze(
-            "select collect_set(recovery['size']['percent']), table_schema, table_name " +
+            "select collect_set(recovery['size']['percent']), schema_name, table_name " +
             "from sys.shards " +
             "group by 2, 3 " +
             "having collect_set(recovery['size']['percent']) != [100.0] " +

@@ -96,14 +96,14 @@ public class InformationSchemaQueryTest extends SQLTransportIntegrationTest {
                 "with (number_of_replicas=8)");
         ensureYellow();
 
-        final SQLResponse response = execute("select * from sys.shards where table_name in ('t1', 't2') and state='UNASSIGNED' order by table_schema, table_name, id");
+        final SQLResponse response = execute("select * from sys.shards where table_name in ('t1', 't2') and state='UNASSIGNED' order by schema_name, table_name, id");
         final CountDownLatch latch = new CountDownLatch(40);
         final AtomicReference<AssertionError> lastAssertionError = new AtomicReference<>();
         for (int i = 0; i < 40; i++) {
             final Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    SQLResponse resp = execute("select * from sys.shards where table_name in ('t1', 't2') and state='UNASSIGNED' order by table_schema, table_name, id");
+                    SQLResponse resp = execute("select * from sys.shards where table_name in ('t1', 't2') and state='UNASSIGNED' order by schema_name, table_name, id");
                     try {
                         assertThat(resp.rows(), Matchers.equalTo(response.rows()));
                     } catch (AssertionError e) {

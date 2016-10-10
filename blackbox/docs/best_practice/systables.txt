@@ -166,10 +166,10 @@ provides access to the status and size of shards, its names and IDs::
     | recovery['type']               | string    |
     | relocating_node                | string    |
     | routing_state                  | string    |
+    | schema_name                    | string    |
     | size                           | long      |
     | state                          | string    |
     | table_name                     | string    |
-    | table_schema                   | string    |
     +--------------------------------+-----------+
     SHOW 25 rows in set (... sec)
 

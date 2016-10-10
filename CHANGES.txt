@@ -5,10 +5,9 @@ Changes for Crate
 Unreleased
 ==========
 
- - BREAKING: renamed column ``schema_name`` to to ``table_schema`` in order
-   to be conform with the SQL standard.
-   Affected tables in ``information_schema``: ``columns``, ``tables``,
-   ``table_partitions``, ``table_constraints`` plus ``sys.shards``
+ - BREAKING: renamed column ``schema_name`` in ``information_schema.columns``,
+   ``information_schema.tables`` and ``information_schema.table_constraints``
+   in order to be conform with the SQL standard.
 
  - Fixed an issue that causes the `try_cast` function to fail while casting
    the WKT representation of a point with invalid coordinates to geo_point.

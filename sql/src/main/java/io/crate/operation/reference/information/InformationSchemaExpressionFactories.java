@@ -117,7 +117,7 @@ public class InformationSchemaExpressionFactories {
                     return new InformationTablePartitionsExpression.PartitionsTableNameExpression();
                 }
             })
-            .put(InformationPartitionsTableInfo.Columns.TABLE_SCHEMA, new RowCollectExpressionFactory() {
+            .put(InformationPartitionsTableInfo.Columns.SCHEMA_NAME, new RowCollectExpressionFactory() {
 
                 @Override
                 public RowCollectExpression create() {

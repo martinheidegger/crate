@@ -35,7 +35,7 @@ public class InformationPartitionsTableInfo extends InformationTableInfo {
 
     public static class References {
         public static final Reference TABLE_NAME = createRef(Columns.TABLE_NAME, DataTypes.STRING);
-        public static final Reference TABLE_SCHEMA = createRef(Columns.TABLE_SCHEMA, DataTypes.STRING);
+        public static final Reference SCHEMA_NAME = createRef(Columns.SCHEMA_NAME, DataTypes.STRING);
         public static final Reference PARTITION_IDENT = createRef(Columns.PARTITION_IDENT, DataTypes.STRING);
         public static final Reference VALUES = createRef(Columns.VALUES, DataTypes.OBJECT);
         public static final Reference NUMBER_OF_SHARDS = createRef(Columns.NUMBER_OF_SHARDS, DataTypes.INTEGER);
@@ -106,7 +106,7 @@ public class InformationPartitionsTableInfo extends InformationTableInfo {
             ImmutableList.<ColumnIdent>of(),
             ImmutableSortedMap.<ColumnIdent, Reference>naturalOrder()
                 .put(Columns.TABLE_NAME, References.TABLE_NAME)
-                .put(Columns.TABLE_SCHEMA, References.TABLE_SCHEMA)
+                .put(Columns.SCHEMA_NAME, References.SCHEMA_NAME)
                 .put(Columns.PARTITION_IDENT, References.PARTITION_IDENT)
                 .put(Columns.VALUES, References.VALUES)
                 .put(Columns.NUMBER_OF_SHARDS, References.NUMBER_OF_SHARDS)
@@ -140,9 +140,9 @@ public class InformationPartitionsTableInfo extends InformationTableInfo {
                 References.NUMBER_OF_REPLICAS,
                 References.NUMBER_OF_SHARDS,
                 References.PARTITION_IDENT,
+                References.SCHEMA_NAME,
                 References.TABLE_SETTINGS,
                 References.TABLE_NAME,
-                References.TABLE_SCHEMA,
                 References.VALUES
             )
         );

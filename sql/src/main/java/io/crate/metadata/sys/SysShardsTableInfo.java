@@ -51,7 +51,7 @@ public class SysShardsTableInfo extends StaticTableInfo {
 
     public static class Columns {
         public static final ColumnIdent ID = new ColumnIdent("id");
-        public static final ColumnIdent TABLE_SCHEMA = new ColumnIdent("table_schema");
+        public static final ColumnIdent SCHEMA_NAME = new ColumnIdent("schema_name");
         public static final ColumnIdent TABLE_NAME = new ColumnIdent("table_name");
         public static final ColumnIdent PARTITION_IDENT = new ColumnIdent("partition_ident");
         public static final ColumnIdent NUM_DOCS = new ColumnIdent("num_docs");
@@ -92,7 +92,7 @@ public class SysShardsTableInfo extends StaticTableInfo {
 
     public static class ReferenceIdents {
         public static final ReferenceIdent ID = new ReferenceIdent(IDENT, Columns.ID);
-        public static final ReferenceIdent TABLE_SCHEMA = new ReferenceIdent(IDENT, Columns.TABLE_SCHEMA);
+        public static final ReferenceIdent SCHEMA_NAME = new ReferenceIdent(IDENT, Columns.SCHEMA_NAME);
         public static final ReferenceIdent TABLE_NAME = new ReferenceIdent(IDENT, Columns.TABLE_NAME);
         public static final ReferenceIdent PARTITION_IDENT = new ReferenceIdent(IDENT, Columns.PARTITION_IDENT);
         public static final ReferenceIdent NUM_DOCS = new ReferenceIdent(IDENT, Columns.NUM_DOCS);
@@ -106,7 +106,7 @@ public class SysShardsTableInfo extends StaticTableInfo {
     }
 
     private static final ImmutableList<ColumnIdent> PRIMARY_KEY = ImmutableList.of(
-        Columns.TABLE_SCHEMA,
+        Columns.SCHEMA_NAME,
         Columns.TABLE_NAME,
         Columns.ID,
         Columns.PARTITION_IDENT
@@ -117,7 +117,7 @@ public class SysShardsTableInfo extends StaticTableInfo {
     @Inject
     public SysShardsTableInfo(ClusterService service, SysNodesTableInfo sysNodesTableInfo) {
         super(IDENT, new ColumnRegistrar(IDENT, RowGranularity.SHARD)
-                .register(Columns.TABLE_SCHEMA, StringType.INSTANCE)
+                .register(Columns.SCHEMA_NAME, StringType.INSTANCE)
                 .register(Columns.TABLE_NAME, StringType.INSTANCE)
                 .register(Columns.ID, IntegerType.INSTANCE)
                 .register(Columns.PARTITION_IDENT, StringType.INSTANCE)

@@ -94,7 +94,7 @@ public class ShardStatsTest extends SQLTransportIntegrationTest {
                 "with(number_of_replicas=2)");
         ensureYellow();
 
-        execute("select count(*) from sys.shards where table_schema='doc' AND table_name='locations'");
+        execute("select count(*) from sys.shards where schema_name='doc' AND table_name='locations'");
         assertThat(response.rowCount(), is(1L));
         assertThat((Long) response.rows()[0][0], is(15L));
     }
@@ -109,7 +109,7 @@ public class ShardStatsTest extends SQLTransportIntegrationTest {
         blobIndices.createBlobTable("blobs", indexSettings).get();
         ensureGreen();
 
-        execute("select table_schema, table_name from sys.shards where table_name = 'blobs'");
+        execute("select schema_name, table_name from sys.shards where table_name = 'blobs'");
         assertThat(response.rowCount(), is(2L));
         for (int i = 0; i < response.rowCount(); i++) {
             assertThat((String) response.rows()[i][0], is("blob"));
@@ -119,14 +119,14 @@ public class ShardStatsTest extends SQLTransportIntegrationTest {
         execute("create blob table sbolb clustered into 4 shards with (number_of_replicas=3)");
         ensureYellow();
 
-        execute("select table_schema, table_name from sys.shards where table_name = 'sbolb'");
+        execute("select schema_name, table_name from sys.shards where table_name = 'sbolb'");
         assertThat(response.rowCount(), is(16L));
         for (int i = 0; i < response.rowCount(); i++) {
             assertThat((String) response.rows()[i][0], is("blob"));
             assertThat((String) response.rows()[i][1], is("sbolb"));
         }
         execute("select count(*) from sys.shards " +
-                "where table_schema='blob' and table_name != 'blobs' " +
+                "where schema_name='blob' and table_name != 'blobs' " +
                 "and table_name != 'sbolb'");
         assertThat(response.rowCount(), is(1L));
         assertThat((Long) response.rows()[0][0], is(0L));
