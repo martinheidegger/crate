@@ -26,7 +26,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import io.crate.action.sql.ResultReceiver;
 import io.crate.analyze.symbol.Field;
 import io.crate.operation.collect.StatsTables;
-import io.crate.planner.Planner;
+import io.crate.planner.MultiPhasePlanner;
 import io.crate.sql.tree.Statement;
 import io.crate.types.DataType;
 
@@ -50,7 +50,7 @@ public interface Portal {
 
     void execute(ResultReceiver resultReceiver, int maxRows);
 
-    ListenableFuture<?> sync(Planner planner, StatsTables statsTables);
+    ListenableFuture<?> sync(MultiPhasePlanner planner, StatsTables statsTables);
 
     void close();
 }

@@ -39,8 +39,8 @@ import io.crate.exceptions.Exceptions;
 import io.crate.exceptions.ReadOnlyException;
 import io.crate.operation.collect.StatsTables;
 import io.crate.operation.projectors.RowReceiver;
+import io.crate.planner.MultiPhasePlanner;
 import io.crate.planner.Plan;
-import io.crate.planner.Planner;
 import io.crate.sql.tree.Statement;
 import io.crate.types.DataType;
 
@@ -124,7 +124,7 @@ class BatchPortal extends AbstractPortal {
     }
 
     @Override
-    public ListenableFuture<Void> sync(Planner planner, StatsTables statsTables) {
+    public ListenableFuture<Void> sync(MultiPhasePlanner planner, StatsTables statsTables) {
         CountdownFutureCallback completionCallback = new CountdownFutureCallback(analysis.size());
         for (int i = 0; i < analysis.size(); i++) {
             UUID jobId = UUID.randomUUID();

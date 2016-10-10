@@ -38,8 +38,8 @@ import io.crate.exceptions.Exceptions;
 import io.crate.exceptions.UnsupportedFeatureException;
 import io.crate.executor.Executor;
 import io.crate.operation.collect.StatsTables;
+import io.crate.planner.MultiPhasePlanner;
 import io.crate.planner.Plan;
-import io.crate.planner.Planner;
 import io.crate.sql.tree.Statement;
 import io.crate.types.DataType;
 
@@ -115,7 +115,7 @@ class BulkPortal extends AbstractPortal {
     }
 
     @Override
-    public ListenableFuture<?> sync(Planner planner, StatsTables statsTables) {
+    public ListenableFuture<?> sync(MultiPhasePlanner planner, StatsTables statsTables) {
         List<Row> bulkParams = Rows.of(bulkArgs);
         Analysis analysis = portalContext.getAnalyzer().boundAnalyze(statement,
             sessionContext,

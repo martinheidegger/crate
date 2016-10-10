@@ -41,8 +41,8 @@ import io.crate.exceptions.ReadOnlyException;
 import io.crate.executor.Executor;
 import io.crate.operation.collect.StatsTables;
 import io.crate.operation.projectors.ResumeHandle;
+import io.crate.planner.MultiPhasePlanner;
 import io.crate.planner.Plan;
-import io.crate.planner.Planner;
 import io.crate.sql.tree.Statement;
 import io.crate.types.DataType;
 import org.elasticsearch.common.logging.ESLogger;
@@ -148,7 +148,7 @@ public class SimplePortal extends AbstractPortal {
     }
 
     @Override
-    public ListenableFuture<?> sync(Planner planner, StatsTables statsTables) {
+    public ListenableFuture<?> sync(MultiPhasePlanner planner, StatsTables statsTables) {
         UUID jobId = UUID.randomUUID();
         Plan plan;
         try {
@@ -215,7 +215,7 @@ public class SimplePortal extends AbstractPortal {
         private final ResultReceiver delegate;
         private final SimplePortal portal;
         private final Analyzer analyzer;
-        private final Planner planner;
+        private final MultiPhasePlanner planner;
         private final Executor executor;
         private final UUID jobId;
         private final SessionContext sessionContext;
@@ -224,7 +224,7 @@ public class SimplePortal extends AbstractPortal {
         ResultReceiverRetryWrapper(ResultReceiver delegate,
                                    SimplePortal portal,
                                    Analyzer analyzer,
-                                   Planner planner,
+                                   MultiPhasePlanner planner,
                                    Executor executor,
                                    UUID jobId,
                                    SessionContext sessionContext) {

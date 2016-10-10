@@ -30,7 +30,7 @@ import io.crate.analyze.symbol.Field;
 import io.crate.exceptions.Exceptions;
 import io.crate.executor.Executor;
 import io.crate.operation.collect.StatsTables;
-import io.crate.planner.Planner;
+import io.crate.planner.MultiPhasePlanner;
 import io.crate.protocols.postgres.FormatCodes;
 import io.crate.protocols.postgres.Portal;
 import io.crate.protocols.postgres.SimplePortal;
@@ -61,7 +61,7 @@ public class SQLOperations {
     private static final Statement EMPTY_STMT = SqlParser.createStatement("select '' from sys.cluster limit 0");
 
     private final Analyzer analyzer;
-    private final Planner planner;
+    private final MultiPhasePlanner planner;
     private final Provider<Executor> executorProvider;
     private final StatsTables statsTables;
     private final ClusterService clusterService;
@@ -70,7 +70,7 @@ public class SQLOperations {
 
     @Inject
     public SQLOperations(Analyzer analyzer,
-                         Planner planner,
+                         MultiPhasePlanner planner,
                          Provider<Executor> executorProvider,
                          StatsTables statsTables,
                          Settings settings,
