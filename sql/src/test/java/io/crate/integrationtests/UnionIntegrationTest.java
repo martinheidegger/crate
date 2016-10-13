@@ -22,6 +22,7 @@
 
 package io.crate.integrationtests;
 
+import io.crate.action.sql.SQLActionException;
 import io.crate.testing.TestingHelpers;
 import io.crate.testing.UseJdbc;
 import org.elasticsearch.test.ESIntegTestCase;
@@ -78,6 +79,17 @@ public class UnionIntegrationTest extends SQLTransportIntegrationTest {
                                                                     "large\n" +
                                                                     "red\n" +
                                                                     "small\n"));
+    }
+
+    @Test
+    public void testUnionAsPartOfJoin() {
+        createColorsAndSizes();
+        expectedException.expect(SQLActionException.class);
+        expectedException.expectMessage("JOIN with sub queries is not supported");
+        execute("select a.name from colors a, (select name from colors " +
+                "union all " +
+                "select name from sizes) b");
+
     }
 
     private void createColorsAndSizes() {
