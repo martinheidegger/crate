@@ -24,6 +24,7 @@
 
 package io.crate.rest.action.admin;
 
+import io.crate.rest.CrateRestMainAction;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
@@ -36,17 +37,38 @@ import static org.elasticsearch.rest.RestRequest.Method.GET;
  */
 public class AdminUIFrontpageAction extends BaseRestHandler {
 
+
+    private final CrateRestMainAction crateRestMainAction;
+    private final RestController controller;
+
     @Inject
-    public AdminUIFrontpageAction(Settings settings, Client client, RestController controller) {
+    public AdminUIFrontpageAction(CrateRestMainAction crateRestMainAction, Settings settings, Client client, RestController controller) {
         super(settings, controller, client);
+        this.crateRestMainAction = crateRestMainAction;
+        this.controller = controller;
+    }
+
+    public void registerHandler() {
+        controller.registerHandler(GET, "/", this);
         controller.registerHandler(GET, "/admin", this);
+
     }
 
     @Override
     protected void handleRequest(RestRequest request, RestChannel channel, Client client) throws Exception {
-        BytesRestResponse resp = new BytesRestResponse(RestStatus.TEMPORARY_REDIRECT);
-        resp.addHeader("Location", "/_plugin/crate-admin/");
-        channel.sendResponse(resp);
+
+        if (request.header("accept").equals("application/json") || request.header("accept").equals("*/*")) {
+            crateRestMainAction.handleRequest(request, channel, client);
+        } else if (request.header("user-agent").contains("Mozilla") || request.uri().contains("admin")) {
+            BytesRestResponse resp = new BytesRestResponse(RestStatus.TEMPORARY_REDIRECT);
+            resp.addHeader("Location", "/_plugin/crate-admin/");
+            channel.sendResponse(resp);
+
+
+        } else {
+            crateRestMainAction.handleRequest(request, channel, client);
+
+        }
     }
 
 }
